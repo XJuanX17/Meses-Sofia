@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Una Sorpresa para Ti ❤️</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* --- Fondo Animado de Corazones Grandes --- */
+    .hearts-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      top: -10%;
+      font-size: 100px;
+      animation: fall 6s linear infinite;
+    }
+
+    /* Variaciones de posición y tamaño */
+    .heart:nth-child(1) { left: 10%; animation-delay: 0s; font-size: 60px; }
+    .heart:nth-child(2) { left: 25%; animation-delay: 2.5s; font-size: 55px; }
+    .heart:nth-child(3) { left: 45%; animation-delay: 1s; font-size: 60px; }
+    .heart:nth-child(4) { left: 65%; animation-delay: 3.5s; font-size: 55px; }
+    .heart:nth-child(5) { left: 80%; animation-delay: 0.8s; font-size: 60px; }
+    .heart:nth-child(6) { left: 92%; animation-delay: 4.2s; font-size: 60px; }
+
+    @keyframes fall {
+      0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 0.9;
+      }
+      100% {
+        top: 105%;
+        transform: translateX(40px) rotate(360deg);
+        opacity: 0.1;
+      }
+    }
+
+    /* --- Tarjeta Principal --- */
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(5px);
+      padding: 35px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      color: #ff4b5c;
+      margin-bottom: 12px;
+      font-size: 24px;
+    }
+
+    p.subtitle {
+      color: #555;
+      margin-bottom: 25px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      background-color: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background-color: #ff4b5c;
+      color: white;
+      border: none;
+      font-size: 18px;
+      padding: 16px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 75, 92, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.05);
+      background-color: #e03a4b;
+    }
+
+    .btn:hover {
+      background-color: #ff4b5c;
+      color: white;
+      border-color: #ff4b5c;
+      transform: translateY(-2px);
+    }
+
+    .btn.correct {
+      background-color: #28a745 !important;
+      color: white !important;
+      border-color: #28a745 !important;
+    }
+
+    .btn.incorrect {
+      background-color: #dc3545 !important;
+      color: white !important;
+      border-color: #dc3545 !important;
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    #reward-card {
+      background: #fff0f3;
+      border: 2px dashed #ff4b5c;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    #reward-card h2 {
+      color: #ff4b5c;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+    <!-- Elemento de audio oculto -->
+<audio id="bg-music" loop>
+  <source src="musica.mp3" type="audio/mpeg">
+  Tu navegador no soporta el reproductor de audio.
+</audio>
+
+<!-- Botón flotante para pausar/reproducir -->
+<button id="music-btn" class="music-control" onclick="toggleMusic()">🎵 Reproducir Música</button>
+
+  <!-- Fondo animado -->
+  <div class="hearts-bg">
+    <div class="heart">❤️</div>
+    <div class="heart">💖</div>
+    <div class="heart">💕</div>
+    <div class="heart">💗</div>
+    <div class="heart">❤️</div>
+    <div class="heart">💖</div>
+  </div>
+
+  <div class="card">
+    <!-- Pantalla 1: Bienvenida / Presentación -->
+    <div id="welcome-container">
+      <h1>¡Hola Amor! ❤️</h1>
+      <p class="subtitle">
+        Cree este mini Quizz para ti, si lo respondes bien al final tendras un premio.<br><br>
+        ¿Acesptas el reto?
+      </p>
+      <button class="btn-primary" onclick="startQuiz()">¡Empezar el Quiz! ✨</button>
+    </div>
+
+    <!-- Pantalla 2: El Quiz (Oculto al inicio) -->
+    <div id="quiz-container" class="hide">
+      <h1 id="question">Cargando pregunta...</h1>
+      <p class="subtitle" id="progress">Pregunta 1 de 5</p>
+      <div id="answer-buttons" class="btn-grid"></div>
+    </div>
+
+    <!-- Pantalla 3: Resultados (Oculto al inicio) -->
+    <div id="result-container" class="hide">
+      <h1>¡Quiz Completado! ❤️</h1>
+      <p class="subtitle" id="final-score"></p>
+      
+      <div id="reward-card">
+        <h2>🎟️ Tu Premio Especial</h2>
+        <p id="reward-text"></p>
+      </div>
+    </div>
+  </div>
+  
+
+    <script>
+        
+    // 1. Personaliza aquí tus preguntas y respuestas
+    const questions = [
+      {
+        question: "¿Dónde fue nuestra primera cita?",
+        answers: [
+          { text: "En el parque comiendo helado", correct: false },
+          { text: "En el centro comercial", correct: true },
+          { text: "En prensencia", correct: false },
+          { text: "En la universidad Uniminuto", correct: false },
+          { text: "En la Finca", correct: false }
+        ]
+      },
+      {
+        question: "¿Cuál es mi comida favorita cuando estoy triste?",
+        answers: [
+          { text: "Pizza", correct: false },
+          { text: "Pan", correct: false },
+          { text: "Helados", correct: true },
+          { text: "Salchipapas", correct: false }
+        ]
+      },
+      {
+        question: "¿Qué fue lo primero que pensé cuando te vi?",
+        answers: [
+          { text: "'Qué mujer tan bonita'", correct: false },
+          { text: "'Tengo que hablarle como sea'", correct: false },
+          { text: "'Se ve muy inteligente'", correct: false },
+          { text: "'Me gustaría conocerla'", correct: false },
+          { text: "Todas las anteriores ❤️️", correct: true }
+        ]
+      },
+      {
+        question: "¿En que lugar fue nuestro primer beso?",
+        answers: [
+          { text: "En presencia", correct: false },
+          { text: "En las arepas de queso", correct: true },
+          { text: "En tu casa", correct: false },
+          { text: "En el centro comercial", correct: false }
+        ]
+      },
+      {
+        question: "¿Cual es mi pelicula de amor favorita?",
+        answers: [
+          { text: "Friends", correct: false },
+          { text: "Love Alarm", correct: false },
+          { text: "Sr y Sra Smith", correct: false },
+          { text: "Con todos menos contigo", correct: true }
+       
+        ]
+      } 
+    ];
+    
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const welcomeContainer = document.getElementById('welcome-container');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultContainer = document.getElementById('result-container');
+    const questionElement = document.getElementById('question');
+    const progressElement = document.getElementById('progress');
+    const answerButtonsElement = document.getElementById('answer-buttons');
+    const finalScoreElement = document.getElementById('final-score');
+    const rewardTextElement = document.getElementById('reward-text');
+
+    function startQuiz() {
+      // Ocultar bienvenida y mostrar el quiz
+      welcomeContainer.classList.add('hide');
+      quizContainer.classList.remove('hide');
+      
+      currentQuestionIndex = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      resetState();
+      let currentQuestion = questions[currentQuestionIndex];
+      questionElement.innerText = currentQuestion.question;
+      progressElement.innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+
+      currentQuestion.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.innerText = answer.text;
+        button.classList.add('btn');
+        if (answer.correct) {
+          button.dataset.correct = answer.correct;
+        }
+        button.addEventListener('click', selectAnswer);
+        answerButtonsElement.appendChild(button);
+      });
+    }
+
+    function resetState() {
+      while (answerButtonsElement.firstChild) {
+        answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+      }
+    }
+
+    function selectAnswer(e) {
+      const selectedButton = e.target;
+      const isCorrect = selectedButton.dataset.correct === "true";
+
+      if (isCorrect) {
+        score++;
+        selectedButton.classList.add('correct');
+      } else {
+        selectedButton.classList.add('incorrect');
+      }
+
+      Array.from(answerButtonsElement.children).forEach(button => {
+        button.disabled = true;
+        if (button.dataset.correct === "true") {
+          button.classList.add('correct');
+        }
+      });
+
+      setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          showQuestion();
+        } else {
+          showResults();
+        }
+      }, 1200);
+    }
+
+    function showResults() {
+      quizContainer.classList.add('hide');
+      resultContainer.classList.remove('hide');
+      
+      finalScoreElement.innerText = `Acertaste ${score} de ${questions.length} preguntas.`;
+
+      if (score === questions.length) {
+        rewardTextElement.innerText = "¡Puntaje perfecto! Te has ganado un cupón válido por una cena hecha por mí + maratón de tu película/serie favorita.";
+      } else {
+        rewardTextElement.innerText = "¡Lo hiciste increíble! Te has ganado un cupón válido por un postre y un abrazo gigante.";
+      }
+    }
+  </script>
+</body>
+</html>
